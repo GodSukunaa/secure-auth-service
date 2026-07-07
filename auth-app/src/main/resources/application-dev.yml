@@ -1,0 +1,48 @@
+#This is for handling the changes made in development, testing(QA), production
+server:
+  port: 8083
+
+  #Database Connection
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/auth_app
+    username: root
+    password: '@Vishal2003'
+    driver-class-name: com.mysql.cj.jdbc.Driver
+#      hikari:
+#        pool-name: HikariCP
+#        maximum-pool-size: 5
+#        connection-timeout: 10000
+#        idle-timeout: 60000
+#        max-lifetime: 1800000
+#        validation-timeout: 1800000
+#        leak-detection-threshold: 0
+#        initialization-fail-timeout: -1
+
+      #To create table from entity
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect  #Dialect is different for each db version as well type : using double shift check
+        format_sql: true
+
+    show-sql: true
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+
+security:
+  jwt:
+    secret: ${JWT_SECRET:saiofal;andkfjnkansdfkjnjksdnvkjnkjssdniuvhnisgdnlkjniughdsfngkknon}
+    issuer: ${JWT_ISSUER:api.substring.com}
+    access-ttl-seconds: ${JWT_ACCESS_TTL_SECONDS:3600}
+    refresh-ttl-seconds: ${JWT_REFRESH_TTL_SECONDS:86400}
+    refresh-token-cookie-name: ${JWT_REFERESH_COOKIE_NAME:refreshToken}
+    cookie-secure: ${JWT_COOKIE_SECURE:true}
+    cookie-http-only: ${JWT_COOKIE_HTTP_ONLY:true}
+    cookie-same-site: ${JWT_COOKIE_SAME_SITE:lax}
+    cookie-domain: ${JWT_COOKIE_DOMAIN:localhost}

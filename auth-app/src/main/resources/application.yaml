@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: auth-app
+
+  #Activate yml file
+  profiles:
+    active: dev
+
+server:
+  port: 8082
+
