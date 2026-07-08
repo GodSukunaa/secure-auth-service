@@ -65,6 +65,7 @@ public class CookieService {
 
     }
 
+    // Prevent the browser from caching and storing sensitive response data
     public void addNoStoreHeaders(HttpServletResponse response) {
         response.setHeader(HttpHeaders.CACHE_CONTROL, "no-store");
         response.setHeader("Pragma", "no-cache");
