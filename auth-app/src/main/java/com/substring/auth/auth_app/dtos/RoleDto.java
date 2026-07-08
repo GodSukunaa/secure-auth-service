@@ -1,6 +1,5 @@
 package com.substring.auth.auth_app.dtos;
 
-import jakarta.persistence.Column;
 import lombok.*;
 
 import java.util.UUID;
