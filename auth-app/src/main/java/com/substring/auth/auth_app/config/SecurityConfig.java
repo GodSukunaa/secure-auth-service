@@ -3,6 +3,8 @@ package com.substring.auth.auth_app.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.substring.auth.auth_app.dtos.ApiError;
 import com.substring.auth.auth_app.security.JwtAuthenticationFilter;
+import com.substring.auth.auth_app.security.OAuth2SuccessHandler;
+import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,14 +19,22 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 public class  SecurityConfig {
 
-    @Autowired
+
     private JwtAuthenticationFilter jwtAuthenticationFilter;
+    private AuthenticationSuccessHandler successHandler;
+
+    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter, AuthenticationSuccessHandler successHandler) {
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+        this.successHandler = successHandler;
+    }
+
     //Secure Interaction with api
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -37,7 +47,13 @@ public class  SecurityConfig {
                 .requestMatchers("/api/v1/auth/login").permitAll()
                         .requestMatchers("/api/v1/auth/refresh").permitAll()
                         .requestMatchers("/api/v1/auth/logout").permitAll()
-                        .anyRequest().authenticated())
+                        .anyRequest().authenticated()
+                )
+                .oauth2Login(oauth ->
+                                oauth.successHandler(successHandler)
+                                        .failureHandler(null)
+                )
+                .logout(AbstractHttpConfigurer::disable)
                 //this handle the non-authorized to secure api
                 .exceptionHandling(ex->ex.authenticationEntryPoint((request,response,e)->{
                     //error msg send to client
@@ -69,7 +85,7 @@ public class  SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+    public AuthenticationManager authenticationManager(@Nonnull AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
 
     }

@@ -216,7 +216,7 @@ public class AuthController {
         try{
            return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.email(),loginRequest.password()));
         }catch (Exception e){
-            //if i throw e then if the password wrong sends Credential exception because this pass this exception and move to the ManagerProvider
+            // if the password wrong sends Credential exception because this pass this exception and move to the ManagerProvider
             throw new BadCredentialsException("Invalid User or Password!!");
         }
     }
