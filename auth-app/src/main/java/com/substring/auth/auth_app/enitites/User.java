@@ -35,6 +35,7 @@ public class User implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private Provider provider = Provider.LOCAL; //To know the user logging from which provider like via facebook,Instagram,email,phone
+    private String providerId;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles",
